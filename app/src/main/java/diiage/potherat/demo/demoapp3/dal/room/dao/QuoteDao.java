@@ -16,6 +16,15 @@ import diiage.potherat.demo.demoapp3.model.Quote;
 public interface QuoteDao extends QuoteRepository {
     @Query("SELECT * FROM Quote")
     PagingSource<Integer, Quote> getAll();
+
+    @Query("SELECT COUNT(*) FROM Quote")
+    LiveData<Integer> getCount();
+    @Query("SELECT COUNT(*) FROM (SELECT DISTINCT source FROM Quote) as source_table")
+    LiveData<Integer> getDistinct();
+
+    @Query("SELECT * FROM Quote ORDER BY date DESC LIMIT 1")
+    LiveData<Quote> getLastQuote();
+
     @Query("SELECT * FROM Quote WHERE id = :id")
     LiveData<Quote> getById(Long id);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
